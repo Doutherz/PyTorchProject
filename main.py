@@ -36,7 +36,7 @@ testLoader = DataLoader(dataset=testDataSet, batch_size=batchSize, shuffle=True)
 
 # neural network model created
 class Net(nn.Module):
-    def __int__(self, inSize, hiddenSize, outSize):
+    def __init__(self, inSize, hiddenSize, outSize):
         super(Net, self).__init__()
         self.fc1 = nn.Linear(inSize, hiddenSize)
         self.relu = nn.ReLU()
