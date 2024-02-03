@@ -10,11 +10,11 @@ trainData = pd.read_csv("sales_data_training.csv")
 testData = pd.read_csv("sales_data_test.csv")
 
 # split data into x and y for the nn
-xTrainData = trainData.drop("total_earnings", axis=1)
-yTrainData = trainData["total_earnings"]
+xTrainData = trainData.drop("total_earnings", axis=1).values
+yTrainData = trainData["total_earnings"].values.reshape(-1, 1)
 
-xTestData = testData.drop("total_earnings", axis=1)
-yTestData = testData["total_earnings"]
+xTestData = testData.drop("total_earnings", axis=1).values
+yTestData = testData["total_earnings"].values.reshape(-1, 1)
 
 # normalize data between 1 and 0
 scaler = MinMaxScaler()
@@ -58,7 +58,7 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # training loop
-numEpochs = 100
+numEpochs = 300
 for epoch in range(numEpochs):
     for inputs, labels in trainLoader:
         optimizer.zero_grad()
@@ -79,5 +79,7 @@ with torch.no_grad():
 allPredictions = torch.cat(allPredictions).numpy()
 allLabels = torch.cat(allLabels).numpy()
 
+mae = torchmetrics.functional.mean_absolute_error(torch.Tensor(allPredictions), torch.Tensor(allLabels))
 RSquared = torchmetrics.functional.r2_score(torch.Tensor(allPredictions), torch.Tensor(allLabels))
-print("R-squared: " + RSquared)
+print("MAE: " + str(mae.item()))
+print("R-squared: " + str(RSquared.item()))
