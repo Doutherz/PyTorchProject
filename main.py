@@ -58,7 +58,7 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.2)
 
 # training loop
-numEpochs = 1000
+numEpochs = 100
 for epoch in range(numEpochs):
     for inputs, labels in trainLoader:
         optimizer.zero_grad()
@@ -83,3 +83,24 @@ mae = torchmetrics.functional.mean_absolute_error(torch.Tensor(allPredictions), 
 RSquared = torchmetrics.functional.r2_score(torch.Tensor(allPredictions), torch.Tensor(allLabels))
 print("MAE: " + str(mae.item()))
 print("R-squared: " + str(RSquared.item()))
+
+myInput = pd.DataFrame([{
+    'critic_rating': float(input("Critic rating: ")),
+    'is_action': float(input("Is it an action game?: ")),
+    'is_exclusive_to_us': float(input("Is it exclusive to us?: ")),
+    'is_portable': float(input("Is it portable?: ")),
+    'is_role_playing': float(input("Is it a RPG?: ")),
+    'is_sequel': float(input("Is it a sequel to another game?: ")),
+    'is_sports': float(input("Is it a sports game?: ")),
+    'suitable_for_kids': float(input("Is it suitable for kids?: ")),
+    'unit_price': float(input("How much will it cost to buy?: "))
+}])
+
+myInputScaled = scaler.transform(myInput.values)
+myInputTensor = torch.Tensor(myInputScaled)
+
+with torch.no_grad():
+    model.eval()
+    predictions = model(myInputTensor)
+
+print("Your game will make: £" + str(int(predictions.item())))
