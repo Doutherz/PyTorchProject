@@ -6,7 +6,6 @@ import pandas as pd
 trainData = pd.read_csv("sales_data_training.csv")
 testData = pd.read_csv("sales_data_test.csv")
 
-xTrainData = trainData.drop("total_earnings")
+xTrainData = trainData.drop("total_earnings", axis=1)
 yTrainData = trainData["total_earnings"]
 
-print(xTrainData.head())
