@@ -3,11 +3,13 @@ import torch.nn as nn
 import torchmetrics
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
+
 import warnings
 
 # Filter out DeprecationWarnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.simplefilter("ignore", DeprecationWarning)
+
+import pandas as pd
 
 # load test data
 trainData = pd.read_csv("sales_data_training.csv")
@@ -59,10 +61,11 @@ outSize = 1
 model = Net(inSize, hiddenSize, outSize)
 
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.2)
+optimizer = torch.optim.Adam(model.parameters(), lr=1)
 
+print("Training AI...")
 # training loop
-numEpochs = 100
+numEpochs = 300
 for epoch in range(numEpochs):
     for inputs, labels in trainLoader:
         optimizer.zero_grad()
@@ -85,6 +88,7 @@ allLabels = torch.cat(allLabels).numpy()
 
 mae = torchmetrics.functional.mean_absolute_error(torch.Tensor(allPredictions), torch.Tensor(allLabels))
 RSquared = torchmetrics.functional.r2_score(torch.Tensor(allPredictions), torch.Tensor(allLabels))
+print("Done!")
 print("MAE: " + str(mae.item()))
 print("R-squared: " + str(RSquared.item()))
 
