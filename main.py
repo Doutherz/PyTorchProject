@@ -55,10 +55,10 @@ outSize = 1
 model = Net(inSize, hiddenSize, outSize)
 
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.2)
 
 # training loop
-numEpochs = 300
+numEpochs = 1000
 for epoch in range(numEpochs):
     for inputs, labels in trainLoader:
         optimizer.zero_grad()
