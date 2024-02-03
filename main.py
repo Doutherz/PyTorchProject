@@ -4,6 +4,10 @@ import torchmetrics
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
+import warnings
+
+# Filter out DeprecationWarnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # load test data
 trainData = pd.read_csv("sales_data_training.csv")
